@@ -108,3 +108,9 @@ VALUES
 ('Tã Huggies size M', 'ta-huggies-m', 'Tã siêu thấm cho bé 6-11kg', 250000, 100, 2, 2, 6, 24, JSON_ARRAY('https://via.placeholder.com/600x600?text=Ta+Huggies+M'), TRUE),
 ('Bình sữa Pigeon 240ml', 'binh-sua-pigeon-240', 'Bình sữa chống đầy hơi', 150000, 50, 2, 1, 0, 24, JSON_ARRAY('https://via.placeholder.com/600x600?text=Binh+sua+Pigeon'), TRUE)
 ON DUPLICATE KEY UPDATE description=VALUES(description), price=VALUES(price), inventory=VALUES(inventory), is_featured=VALUES(is_featured);
+
+-- Create an admin user if not exists (password to be set manually)
+INSERT INTO users (email, phone, password_hash, full_name, role)
+SELECT 'admin@example.com', NULL, '$2a$10$w9HUxGxH0T8N1Xc9iUO9nu6hM3JQYw8U1K9Q2y7m3q9Q7vV0nR9Pq', 'Administrator', 'admin'
+WHERE NOT EXISTS (SELECT 1 FROM users WHERE email = 'admin@example.com');
+-- The above hash is bcrypt for password: Admin@123 (change in production)

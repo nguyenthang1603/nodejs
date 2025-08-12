@@ -14,6 +14,8 @@ export default function LoginPage() {
       const res = await axios.post('/api/login', { emailOrPhone, password })
       localStorage.setItem('token', res.data.token)
       localStorage.setItem('user', JSON.stringify(res.data.user))
+      // apply auth header globally
+      try { (await import('../api')).setAuthToken(res.data.token) } catch {}
       navigate('/')
     } catch (e) {
       setError('Đăng nhập thất bại')

@@ -2,6 +2,8 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import { createPool } from 'mysql2/promise';
+import { authenticateRequest, requireAdmin } from './middleware/auth.js';
+import { buildAdminRouter } from './routes/admin.js';
 
 dotenv.config();
 
@@ -215,6 +217,9 @@ app.get('/api/orders', async (req, res) => {
     res.status(500).json({ error: (e as Error).message });
   }
 });
+
+// Admin routes (protected)
+app.use('/api/admin', authenticateRequest, requireAdmin, buildAdminRouter(pool as any));
 
 const port = Number(process.env.PORT || 4000);
 app.listen(port, () => {
